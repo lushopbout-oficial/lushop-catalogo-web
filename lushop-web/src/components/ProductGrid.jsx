@@ -1,14 +1,51 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import ProductCard from './ProductCard';
 import { getProducts, searchProducts } from '@/services/sheetsAPI';
 
+// ─── Agrupa un array flat de SKUs en un array de modelos ────────────────────
+function groupByModel(products) {
+  const map = {};
+
+  products.forEach(p => {
+    const key = `${p.marca}__${p.modelo}`;
+
+    if (!map[key]) {
+      map[key] = {
+        marca:     p.marca,
+        modelo:    p.modelo,
+        categoria: p.categoria,
+        segmento:  p.segmento,
+        foto_url:  p.foto_url,
+        sizes: [],
+      };
+    }
+
+    if (p.stock > 0) {
+      map[key].sizes.push({
+        sku:          p.sku,
+        talla:        p.talla,
+        stock:        p.stock,
+        precio_venta: p.precio_venta,
+      });
+    }
+  });
+
+  return Object.values(map)
+    .filter(m => m.sizes.length > 0)
+    .map(m => ({
+      ...m,
+      sizes: m.sizes.sort((a, b) => parseFloat(a.talla) - parseFloat(b.talla)),
+    }));
+}
+// ────────────────────────────────────────────────────────────────────────────
+
 export default function ProductGrid({ initialCategory = null }) {
-  const [products, setProducts] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [rawProducts, setRawProducts]   = useState([]);
+  const [loading, setLoading]           = useState(true);
   const [activeFilter, setActiveFilter] = useState(initialCategory || 'Todos');
-  const [searchTerm, setSearchTerm] = useState('');
+  const [searchTerm, setSearchTerm]     = useState('');
 
   useEffect(() => {
     loadProducts();
@@ -18,7 +55,7 @@ export default function ProductGrid({ initialCategory = null }) {
     setLoading(true);
     try {
       const data = await getProducts();
-      setProducts(data);
+      setRawProducts(data);
     } catch (error) {
       console.error('Error cargando productos:', error);
     } finally {
@@ -29,14 +66,13 @@ export default function ProductGrid({ initialCategory = null }) {
   const handleFilter = async (filter) => {
     setActiveFilter(filter);
     setLoading(true);
-
     try {
       if (filter === 'Todos') {
         const data = await getProducts();
-        setProducts(data);
+        setRawProducts(data);
       } else {
         const data = await searchProducts({ marca: filter });
-        setProducts(data);
+        setRawProducts(data);
       }
     } catch (error) {
       console.error('Error filtrando:', error);
@@ -51,11 +87,10 @@ export default function ProductGrid({ initialCategory = null }) {
       loadProducts();
       return;
     }
-
     setLoading(true);
     try {
       const data = await searchProducts({ search: searchTerm });
-      setProducts(data);
+      setRawProducts(data);
     } catch (error) {
       console.error('Error buscando:', error);
     } finally {
@@ -63,23 +98,25 @@ export default function ProductGrid({ initialCategory = null }) {
     }
   };
 
-  const filteredProducts = searchTerm
-    ? products.filter(
-        p =>
-          p.modelo.toLowerCase().includes(searchTerm.toLowerCase()) ||
-          p.marca.toLowerCase().includes(searchTerm.toLowerCase())
-      )
-    : products;
+  const groupedProducts = useMemo(() => {
+    const filtered = searchTerm
+      ? rawProducts.filter(
+          p =>
+            p.modelo.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            p.marca.toLowerCase().includes(searchTerm.toLowerCase())
+        )
+      : rawProducts;
+
+    return groupByModel(filtered);
+  }, [rawProducts, searchTerm]);
 
   return (
     <section id="productos" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-      {/* Header */}
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-12">
         <h2 className="font-oswald text-4xl lg:text-5xl font-semibold uppercase tracking-wide">
           Nuevos Arrivals
         </h2>
 
-        {/* Filters */}
         <div className="flex flex-wrap gap-3">
           {['Todos', 'Nike', 'Adidas', 'Jordan', 'Premium'].map(filter => (
             <button
@@ -97,7 +134,6 @@ export default function ProductGrid({ initialCategory = null }) {
         </div>
       </div>
 
-      {/* Search Bar */}
       <form onSubmit={handleSearch} className="mb-10">
         <div className="relative max-w-md">
           <input
@@ -116,24 +152,24 @@ export default function ProductGrid({ initialCategory = null }) {
         </div>
       </form>
 
-      {/* Loading State */}
       {loading && (
         <div className="flex justify-center items-center py-20">
           <div className="spinner" />
         </div>
       )}
 
-      {/* Products Grid */}
-      {!loading && filteredProducts.length > 0 && (
+      {!loading && groupedProducts.length > 0 && (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-          {filteredProducts.map(product => (
-            <ProductCard key={product.sku} product={product} />
+          {groupedProducts.map(group => (
+            <ProductCard
+              key={`${group.marca}__${group.modelo}`}
+              group={group}
+            />
           ))}
         </div>
       )}
 
-      {/* No Results */}
-      {!loading && filteredProducts.length === 0 && (
+      {!loading && groupedProducts.length === 0 && (
         <div className="text-center py-20">
           <p className="text-text-secondary text-lg">
             No se encontraron productos.
