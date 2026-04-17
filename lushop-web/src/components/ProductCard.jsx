@@ -5,10 +5,12 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useCart } from '@/context/CartContext';
 
+// Formatea precio en MXN sin decimales
+const formatPrice = (num) =>
+  Math.round(Number(num) || 0).toLocaleString('es-MX');
+
 export default function ProductCard({ group }) {
   const { addToCart } = useCart();
-
-  // Talla seleccionada por defecto = la primera disponible
   const [selectedSize, setSelectedSize] = useState(group.sizes[0]);
   const [added, setAdded] = useState(false);
 
@@ -17,7 +19,6 @@ export default function ProductCard({ group }) {
     e.stopPropagation();
     if (!selectedSize) return;
 
-    // Reconstruimos el objeto de producto en el formato que espera el carrito
     addToCart({
       sku:          selectedSize.sku,
       marca:        group.marca,
@@ -30,27 +31,24 @@ export default function ProductCard({ group }) {
       precio_venta: selectedSize.precio_venta,
     });
 
-    // Feedback visual rápido
     setAdded(true);
     setTimeout(() => setAdded(false), 1500);
   };
 
-  // Badge: Premium > stock bajo > nada
+  const totalStock = group.sizes.reduce((sum, s) => sum + s.stock, 0);
+
   const badge = (() => {
     if (group.segmento === 'Premium')
       return { text: 'PREMIUM', cls: 'bg-accent-gold text-bg-primary' };
-    const totalStock = group.sizes.reduce((sum, s) => sum + s.stock, 0);
     if (totalStock <= 2)
       return { text: `${totalStock} DISPONIBLES`, cls: 'bg-accent-silver text-bg-primary' };
     return null;
   })();
 
-  const totalStock = group.sizes.reduce((sum, s) => sum + s.stock, 0);
-
   return (
     <div className="group bg-bg-card border border-border-light overflow-hidden transition-all duration-500 hover:-translate-y-3 hover:border-accent-silver hover:shadow-2xl hover:shadow-accent-silver/10">
-      
-      {/* Imagen — click lleva al detalle del SKU seleccionado */}
+
+      {/* Imagen */}
       <Link href={`/producto/${selectedSize.sku}`} className="block">
         <div className="relative h-80 bg-bg-secondary overflow-hidden cursor-pointer">
           <Image
@@ -75,7 +73,7 @@ export default function ProductCard({ group }) {
         </div>
       </Link>
 
-      {/* Info del producto */}
+      {/* Info */}
       <div className="p-6">
         <div className="text-xs text-text-secondary uppercase tracking-widest mb-2 font-semibold">
           {group.marca}
@@ -85,7 +83,7 @@ export default function ProductCard({ group }) {
           {group.modelo}
         </h3>
 
-        {/* ── Selector de tallas ── */}
+        {/* Selector de tallas */}
         <div className="mb-4">
           <p className="text-xs text-text-secondary uppercase tracking-wider mb-2">
             Talla:&nbsp;
@@ -112,11 +110,11 @@ export default function ProductCard({ group }) {
           </div>
         </div>
 
-        {/* Footer: precio + botón */}
+        {/* Footer */}
         <div className="flex items-center justify-between pt-4 border-t border-border-light">
           <div className="font-oswald text-3xl font-bold text-accent-silver">
             <span className="text-lg opacity-80">$</span>
-            {selectedSize.precio_venta.toLocaleString()}
+            {formatPrice(selectedSize.precio_venta)}
           </div>
 
           <button
