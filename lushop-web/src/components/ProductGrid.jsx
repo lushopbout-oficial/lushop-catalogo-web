@@ -9,7 +9,7 @@ function groupByModel(products) {
   const map = {};
 
   products.forEach(p => {
-    const key = `${p.marca}__${p.modelo}`;
+    const key = `${p.marca.trim().toLowerCase()}__${p.modelo.trim().toLowerCase()}`;
 
     if (!map[key]) {
       map[key] = {
