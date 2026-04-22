@@ -24,87 +24,85 @@ export default function Header() {
 
   return (
     <>
-      {/* Announcement bar */}
-      <div className="bg-bg-dark text-text-light text-center py-2.5 text-[11px] uppercase tracking-[0.25em] font-medium">
+      {/* Barra de anuncio */}
+      <div className="bg-black text-white text-center py-2.5 text-[10px] uppercase tracking-[0.3em] font-bold">
         🚚 Envío gratis en compras mayores a $2,500 MXN
       </div>
 
-      {/* Header */}
+      {/* Header con Glassmorphism */}
       <header
-        className="sticky top-0 z-50 bg-bg-secondary transition-all duration-300"
-        style={{ boxShadow: scrolled ? '0 1px 0 rgba(0,0,0,0.08)' : 'none' }}
+        className={`sticky top-0 z-50 transition-all duration-500 ${
+          scrolled 
+            ? 'bg-white/70 backdrop-blur-md border-b border-black/5 py-1' 
+            : 'bg-white py-3'
+        }`}
       >
         <div className="max-w-7xl mx-auto px-6 lg:px-12">
           <div className="flex items-center justify-between h-14 lg:h-16">
 
             {/* Logo */}
-            <Link href="/" className="font-oswald text-xl font-bold tracking-[0.12em] text-text-primary uppercase">
-              LU SHOP+
+            <Link href="/" className="font-oswald text-2xl font-bold tracking-[0.2em] text-black uppercase hover:opacity-70 transition-opacity">
+              LU SHOP<span className="text-gray-400">+</span>
             </Link>
 
-            {/* Nav desktop */}
-            <nav className="hidden lg:flex items-center gap-8">
+            {/* Nav desktop con indicador animado */}
+            <nav className="hidden lg:flex items-center gap-10">
               {CATEGORIAS.map(cat => (
                 <Link
                   key={cat.label}
                   href={cat.href}
-                  className="text-[12px] uppercase tracking-[0.15em] text-text-secondary hover:text-text-primary transition-colors duration-200 font-medium"
+                  className="group relative text-[11px] uppercase tracking-[0.2em] text-gray-500 hover:text-black transition-colors duration-300 font-bold"
                 >
                   {cat.label}
+                  <span className="absolute -bottom-1 left-0 w-0 h-px bg-black transition-all duration-300 group-hover:w-full" />
                 </Link>
               ))}
-              <span className="text-[12px] uppercase tracking-[0.15em] text-text-secondary/40 cursor-not-allowed flex items-center gap-1.5">
+              <span className="text-[11px] uppercase tracking-[0.2em] text-gray-300 cursor-not-allowed flex items-center gap-1.5 font-bold">
                 Tech
-                <span className="text-[9px] border border-current px-1 py-0.5 rounded-sm opacity-60">soon</span>
+                <span className="text-[8px] border border-current px-1 py-0.5 rounded-sm">soon</span>
               </span>
             </nav>
 
-            {/* Íconos derecha */}
-            <div className="flex items-center gap-4">
-              {/* Buscar */}
-              <button className="text-text-secondary hover:text-text-primary transition-colors hidden sm:block">
+            {/* Íconos */}
+            <div className="flex items-center gap-6">
+              <button className="text-gray-500 hover:text-black transition-transform hover:scale-110 hidden sm:block">
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                 </svg>
               </button>
 
-              {/* Carrito */}
               <button
                 onClick={() => setIsOpen(true)}
-                className="relative text-text-secondary hover:text-text-primary transition-colors"
+                className="relative text-gray-500 hover:text-black transition-transform hover:scale-110"
               >
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
                 </svg>
                 {getItemCount() > 0 && (
-                  <span className="absolute -top-2 -right-2 w-4 h-4 bg-bg-dark text-white rounded-full flex items-center justify-center text-[9px] font-bold">
+                  <span className="absolute -top-2 -right-2 w-4 h-4 bg-black text-white rounded-full flex items-center justify-center text-[8px] font-bold animate-pulse">
                     {getItemCount()}
                   </span>
                 )}
               </button>
 
-              {/* Mobile hamburger */}
-              <button
-                onClick={() => setMenuOpen(!menuOpen)}
-                className="lg:hidden text-text-secondary hover:text-text-primary transition-colors"
-              >
+              {/* Menú móvil */}
+              <button onClick={() => setMenuOpen(!menuOpen)} className="lg:hidden text-black">
                 <div className="w-5 flex flex-col gap-1.5">
-                  <span className={`block h-px bg-current transition-all duration-300 origin-center ${menuOpen ? 'rotate-45 translate-y-2' : ''}`} />
-                  <span className={`block h-px bg-current transition-all duration-300 ${menuOpen ? 'opacity-0 scale-x-0' : ''}`} />
-                  <span className={`block h-px bg-current transition-all duration-300 origin-center ${menuOpen ? '-rotate-45 -translate-y-2' : ''}`} />
+                  <span className={`block h-px bg-current transition-all duration-300 ${menuOpen ? 'rotate-45 translate-y-2' : ''}`} />
+                  <span className={`block h-px bg-current transition-all duration-300 ${menuOpen ? 'opacity-0' : ''}`} />
+                  <span className={`block h-px bg-current transition-all duration-300 ${menuOpen ? '-rotate-45 -translate-y-2' : ''}`} />
                 </div>
               </button>
             </div>
           </div>
 
-          {/* Mobile menu */}
           <div className={`lg:hidden overflow-hidden transition-all duration-500 ${menuOpen ? 'max-h-64 pb-6' : 'max-h-0'}`}>
-            <nav className="flex flex-col gap-5 pt-4 border-t border-border-light">
+            <nav className="flex flex-col gap-5 pt-4 border-t border-gray-100">
               {CATEGORIAS.map(cat => (
                 <Link
                   key={cat.label}
                   href={cat.href}
-                  className="text-sm uppercase tracking-[0.15em] text-text-secondary hover:text-text-primary transition-colors"
+                  className="text-xs uppercase tracking-[0.2em] text-gray-500 font-bold"
                   onClick={() => setMenuOpen(false)}
                 >
                   {cat.label}
