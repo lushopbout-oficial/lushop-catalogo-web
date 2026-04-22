@@ -1,95 +1,148 @@
 'use client';
 
+import { useState, useEffect } from 'react';
+import Image from 'next/image';
+
+const SLIDES = [
+  {
+    label:    'Nuevos Arrivals',
+    titulo:   'Eleva tu\nestilo.',
+    subtitulo:'Sneakers premium.\nPrecios accesibles.',
+    imagen:   'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=900&q=80',
+    bg:       '#f0ede8',
+  },
+  {
+    label:    'Nueva Colección',
+    titulo:   'Hecho para\ndestacar.',
+    subtitulo:'Modelos exclusivos\nseleccionados para ti.',
+    imagen:   'https://images.unsplash.com/photo-1600185365926-3a2ce3cdb9eb?w=900&q=80',
+    bg:       '#e8ecf0',
+  },
+  {
+    label:    'Colección Premium',
+    titulo:   'Estilo sin\ncompromisos.',
+    subtitulo:'Las mejores marcas\na tu alcance.',
+    imagen:   'https://images.unsplash.com/photo-1595950653106-6c9ebd614d3a?w=900&q=80',
+    bg:       '#ece8f0',
+  },
+];
+
 export default function Hero() {
+  const [current, setCurrent] = useState(0);
+  const [animating, setAnimating] = useState(false);
+
+  const goTo = (idx) => {
+    if (idx === current || animating) return;
+    setAnimating(true);
+    setTimeout(() => {
+      setCurrent(idx);
+      setAnimating(false);
+    }, 400);
+  };
+
   const scrollToProducts = () => {
     document.getElementById('productos')?.scrollIntoView({ behavior: 'smooth' });
   };
 
+  const slide = SLIDES[current];
+
   return (
-    <section className="relative h-screen flex items-center overflow-hidden">
+    <section
+      className="relative overflow-hidden transition-colors duration-700"
+      style={{ background: slide.bg, minHeight: '88vh' }}
+    >
+      <div className="max-w-7xl mx-auto px-6 lg:px-12 h-full">
+        <div className="flex items-center min-h-[88vh] gap-8">
 
-      {/* Imagen fondo full bleed */}
-      <div
-        className="absolute inset-0 bg-cover bg-center transition-transform duration-[8000ms] ease-out scale-105 hover:scale-100"
-        style={{
-          backgroundImage: 'url(https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=1800)',
-          filter: 'brightness(0.25)',
-        }}
-      />
-
-      {/* Línea decorativa izquierda */}
-      <div className="absolute left-0 top-0 bottom-0 w-1 bg-accent-silver opacity-30" />
-
-      {/* Contenido — alineado izquierda, estilo editorial */}
-      <div className="relative z-10 max-w-7xl mx-auto px-8 lg:px-16 w-full">
-
-        {/* Label superior */}
-        <div className="flex items-center gap-3 mb-8">
-          <div className="w-8 h-px bg-accent-silver" />
-          <span className="text-accent-silver text-xs uppercase tracking-[0.3em] font-medium">
-            Nueva Colección 2025
-          </span>
-        </div>
-
-        {/* Título principal */}
-        <h1 className="font-oswald text-6xl sm:text-7xl lg:text-[7rem] font-bold uppercase leading-none mb-6 tracking-tight">
-          <span className="block text-white">Sneakers</span>
-          <span className="block text-accent-silver">Premium</span>
-        </h1>
-
-        {/* Subtítulo */}
-        <p className="text-text-secondary text-base sm:text-lg mb-12 max-w-md leading-relaxed font-light">
-          Marcas exclusivas. Modelos únicos.<br />
-          Envío gratis en compras mayores a $2,500 MXN.
-        </p>
-
-        {/* Botones */}
-        <div className="flex items-center gap-6">
-          <button
-            onClick={scrollToProducts}
-            className="group relative px-10 py-4 border border-white text-white text-xs uppercase tracking-[0.2em] font-semibold overflow-hidden transition-all duration-500 hover:text-bg-primary"
-          >
-            <span className="absolute inset-0 bg-white -translate-x-full group-hover:translate-x-0 transition-transform duration-500" />
-            <span className="relative">Explorar Catálogo</span>
-          </button>
-
-          <button
-            onClick={scrollToProducts}
-            className="text-text-secondary text-xs uppercase tracking-[0.2em] hover:text-white transition-colors duration-300 flex items-center gap-2"
-          >
-            <span>Ver todo</span>
-            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M17 8l4 4m0 0l-4 4m4-4H3" />
-            </svg>
-          </button>
-        </div>
-
-        {/* Stats row */}
-        <div className="flex items-center gap-12 mt-20 pt-12 border-t border-border-light">
-          {[
-            { num: '250+', label: 'Modelos' },
-            { num: '15+', label: 'Marcas' },
-            { num: '100%', label: 'Garantizado' },
-          ].map(stat => (
-            <div key={stat.label}>
-              <div className="font-oswald text-2xl font-bold text-white">{stat.num}</div>
-              <div className="text-text-secondary text-xs uppercase tracking-wider mt-1">{stat.label}</div>
+          {/* Lado izquierdo — texto */}
+          <div className="flex-1 py-20 z-10">
+            {/* Label */}
+            <div className="flex items-center gap-3 mb-8">
+              <div className="w-8 h-px bg-text-primary opacity-40" />
+              <span
+                className="text-[10px] uppercase tracking-[0.3em] text-text-secondary font-medium transition-opacity duration-300"
+                style={{ opacity: animating ? 0 : 1 }}
+              >
+                {slide.label}
+              </span>
             </div>
-          ))}
+
+            {/* Título */}
+            <h1
+              className="font-oswald text-6xl sm:text-7xl lg:text-[82px] font-bold leading-none mb-6 tracking-tight text-text-primary transition-all duration-500"
+              style={{
+                opacity: animating ? 0 : 1,
+                transform: animating ? 'translateY(16px)' : 'translateY(0)',
+                whiteSpace: 'pre-line',
+              }}
+            >
+              {slide.titulo}
+            </h1>
+
+            {/* Subtítulo */}
+            <p
+              className="text-text-secondary text-base leading-relaxed mb-10 max-w-xs transition-all duration-500 delay-75"
+              style={{
+                opacity: animating ? 0 : 1,
+                whiteSpace: 'pre-line',
+              }}
+            >
+              {slide.subtitulo}
+            </p>
+
+            {/* CTA */}
+            <button
+              onClick={scrollToProducts}
+              className="group inline-flex items-center gap-3 bg-text-primary text-white text-[11px] uppercase tracking-[0.2em] px-8 py-4 font-semibold hover:bg-black transition-all duration-300"
+            >
+              Explorar Catálogo
+              <svg className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+              </svg>
+            </button>
+
+            {/* Slide indicators */}
+            <div className="flex items-center gap-4 mt-16">
+              {SLIDES.map((_, i) => (
+                <button
+                  key={i}
+                  onClick={() => goTo(i)}
+                  className="flex items-center gap-3 group"
+                >
+                  <span className={`text-[11px] font-medium transition-colors duration-300 ${i === current ? 'text-text-primary' : 'text-text-secondary/40'}`}>
+                    0{i + 1}
+                  </span>
+                  <div className="h-px transition-all duration-500 bg-text-primary"
+                    style={{ width: i === current ? '32px' : '16px', opacity: i === current ? 1 : 0.2 }}
+                  />
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Lado derecho — imagen */}
+          <div
+            className="hidden lg:flex flex-1 items-center justify-center relative"
+            style={{ minHeight: '88vh' }}
+          >
+            <div
+              className="relative w-full transition-all duration-500"
+              style={{
+                opacity: animating ? 0 : 1,
+                transform: animating ? 'translateX(20px) scale(0.97)' : 'translateX(0) scale(1)',
+                height: '70vh',
+              }}
+            >
+              <Image
+                src={slide.imagen}
+                alt={slide.titulo}
+                fill
+                className="object-contain object-center drop-shadow-2xl"
+                priority
+              />
+            </div>
+          </div>
         </div>
-      </div>
-
-      {/* Número decorativo derecho */}
-      <div className="absolute right-8 top-1/2 -translate-y-1/2 writing-mode-vertical">
-        <span className="text-white/5 font-oswald text-[12rem] font-bold leading-none select-none">
-          LU
-        </span>
-      </div>
-
-      {/* Scroll indicator */}
-      <div className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2">
-        <div className="w-px h-12 bg-gradient-to-b from-transparent to-accent-silver/50 animate-pulse" />
-        <span className="text-text-secondary text-[10px] uppercase tracking-[0.3em]">Scroll</span>
       </div>
     </section>
   );
