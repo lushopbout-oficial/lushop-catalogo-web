@@ -52,8 +52,8 @@ export default function Footer() {
 
         {/* Bottom */}
         <div className="border-t border-white/10 pt-8 flex flex-col sm:flex-row justify-between items-center gap-4">
-          <p className="text-[11px] text-white/30">© 2025 LU SHOP+. Todos los derechos reservados.</p>
-          <p className="text-[11px] text-white/30">Hecho con pasión · Hecho para destacar.</p>
+          <p className="text-[11px] text-white/30">© 2026 LU SHOP+. Todos los derechos reservados por Diego Percastegui.</p>
+          <p className="text-[11px] text-white/30">Modelo realizado con pasión· Hecho para destacar.</p>
         </div>
       </div>
     </footer>
