@@ -5,7 +5,6 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useCart } from '@/context/CartContext';
 
-// Formatea precio en MXN sin decimales
 const formatPrice = (num) =>
   Math.round(Number(num) || 0).toLocaleString('es-MX');
 
@@ -13,12 +12,12 @@ export default function ProductCard({ group }) {
   const { addToCart } = useCart();
   const [selectedSize, setSelectedSize] = useState(group.sizes[0]);
   const [added, setAdded] = useState(false);
+  const [hovered, setHovered] = useState(false);
 
   const handleAddToCart = (e) => {
     e.preventDefault();
     e.stopPropagation();
     if (!selectedSize) return;
-
     addToCart({
       sku:          selectedSize.sku,
       marca:        group.marca,
@@ -30,78 +29,95 @@ export default function ProductCard({ group }) {
       stock:        selectedSize.stock,
       precio_venta: selectedSize.precio_venta,
     });
-
     setAdded(true);
     setTimeout(() => setAdded(false), 1500);
   };
 
   const totalStock = group.sizes.reduce((sum, s) => sum + s.stock, 0);
-
-  const badge = (() => {
-    if (group.segmento === 'Premium')
-      return { text: 'PREMIUM', cls: 'bg-accent-gold text-bg-primary' };
-    if (totalStock <= 2)
-      return { text: `${totalStock} DISPONIBLES`, cls: 'bg-accent-silver text-bg-primary' };
-    return null;
-  })();
+  const isPremium = group.segmento === 'Premium';
 
   return (
-    <div className="group bg-bg-card border border-border-light overflow-hidden transition-all duration-500 hover:-translate-y-3 hover:border-accent-silver hover:shadow-2xl hover:shadow-accent-silver/10">
-
+    <div
+      className="group relative bg-bg-card overflow-hidden transition-all duration-700"
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+      style={{ transform: hovered ? 'translateY(-4px)' : 'translateY(0)' }}
+    >
       {/* Imagen */}
       <Link href={`/producto/${selectedSize.sku}`} className="block">
-        <div className="relative h-80 bg-bg-secondary overflow-hidden cursor-pointer">
+        <div className="relative overflow-hidden bg-bg-secondary" style={{ aspectRatio: '4/3' }}>
           <Image
             src={group.foto_url || '/placeholder.jpg'}
             alt={group.modelo}
             fill
-            className="object-cover transition-transform duration-700 group-hover:scale-110"
+            className="object-cover transition-transform duration-700"
+            style={{ transform: hovered ? 'scale(1.08)' : 'scale(1)' }}
             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
           />
 
-          {badge && (
-            <div className={`absolute top-4 right-4 ${badge.cls} px-3 py-1.5 text-xs font-bold uppercase tracking-wider`}>
-              {badge.text}
-            </div>
-          )}
+          {/* Overlay al hover */}
+          <div
+            className="absolute inset-0 bg-bg-primary transition-opacity duration-500"
+            style={{ opacity: hovered ? 0.15 : 0 }}
+          />
 
-          {totalStock > 2 && (
-            <div className="absolute bottom-4 left-4 bg-accent-silver/95 text-bg-primary px-3 py-1.5 text-xs font-semibold tracking-wide">
-              {totalStock} Disponibles
-            </div>
-          )}
+          {/* Badges */}
+          <div className="absolute top-4 left-4 flex flex-col gap-2">
+            {isPremium && (
+              <span className="bg-accent-gold text-bg-primary text-[10px] font-bold uppercase tracking-widest px-3 py-1">
+                Premium
+              </span>
+            )}
+            {totalStock <= 2 && (
+              <span className="bg-white text-bg-primary text-[10px] font-bold uppercase tracking-widest px-3 py-1">
+                {totalStock} disponibles
+              </span>
+            )}
+          </div>
+
+          {/* Botón rápido al hover — aparece desde abajo */}
+          <div
+            className="absolute bottom-0 left-0 right-0 transition-all duration-500"
+            style={{ transform: hovered ? 'translateY(0)' : 'translateY(100%)' }}
+          >
+            <button
+              onClick={handleAddToCart}
+              className={`w-full py-3 text-xs font-bold uppercase tracking-widest transition-colors duration-300 ${
+                added
+                  ? 'bg-green-600 text-white'
+                  : 'bg-white text-bg-primary hover:bg-accent-silver'
+              }`}
+            >
+              {added ? '✓ Agregado al carrito' : 'Agregar al carrito'}
+            </button>
+          </div>
         </div>
       </Link>
 
-      {/* Info */}
-      <div className="p-6">
-        <div className="text-xs text-text-secondary uppercase tracking-widest mb-2 font-semibold">
-          {group.marca}
-        </div>
+      {/* Info del producto */}
+      <div className="p-5">
 
-        <h3 className="font-oswald text-xl font-semibold mb-4 text-text-primary leading-tight tracking-wide">
+        {/* Marca */}
+        <p className="text-[10px] text-text-secondary uppercase tracking-[0.2em] mb-2 font-medium">
+          {group.marca}
+        </p>
+
+        {/* Modelo */}
+        <h3 className="font-oswald text-lg font-semibold text-white uppercase tracking-wide mb-4 leading-tight">
           {group.modelo}
         </h3>
 
-        {/* Selector de tallas */}
+        {/* Selector tallas */}
         <div className="mb-4">
-          <p className="text-xs text-text-secondary uppercase tracking-wider mb-2">
-            Talla:&nbsp;
-            <span className="text-text-primary font-semibold">
-              {selectedSize.talla}
-            </span>
-          </p>
-
-          <div className="flex flex-wrap gap-2">
+          <div className="flex flex-wrap gap-1.5">
             {group.sizes.map(size => (
               <button
                 key={size.sku}
                 onClick={() => setSelectedSize(size)}
-                title={`Stock: ${size.stock}`}
-                className={`px-3 py-1 text-xs font-semibold border transition-all ${
+                className={`min-w-[36px] px-2 py-1 text-[11px] font-medium border transition-all duration-200 ${
                   selectedSize.sku === size.sku
-                    ? 'bg-accent-silver text-bg-primary border-accent-silver'
-                    : 'bg-transparent text-text-secondary border-border-medium hover:border-accent-silver hover:text-text-primary'
+                    ? 'border-white bg-white text-bg-primary'
+                    : 'border-border-light text-text-secondary hover:border-border-medium hover:text-white'
                 }`}
               >
                 {size.talla}
@@ -110,25 +126,37 @@ export default function ProductCard({ group }) {
           </div>
         </div>
 
-        {/* Footer */}
+        {/* Precio + línea separadora */}
         <div className="flex items-center justify-between pt-4 border-t border-border-light">
-          <div className="font-oswald text-3xl font-bold text-accent-silver">
-            <span className="text-lg opacity-80">$</span>
+          <div className="font-oswald text-2xl font-bold text-white">
+            <span className="text-sm text-text-secondary mr-0.5">$</span>
             {formatPrice(selectedSize.precio_venta)}
+            <span className="text-xs text-text-secondary ml-1 font-normal">MXN</span>
           </div>
 
+          {/* Ícono de carrito — versión desktop (el botón principal está en hover) */}
           <button
             onClick={handleAddToCart}
-            className={`px-5 py-2 border text-xs uppercase tracking-wider font-semibold transition-all ${
+            className={`p-2 border transition-all duration-300 ${
               added
-                ? 'bg-green-600 border-green-600 text-white'
-                : 'border-accent-silver text-accent-silver hover:bg-accent-silver hover:text-bg-primary'
+                ? 'border-green-500 text-green-500'
+                : 'border-border-light text-text-secondary hover:border-white hover:text-white'
             }`}
+            title="Agregar al carrito"
           >
-            {added ? '✓ Agregado' : 'Agregar'}
+            {added ? (
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+              </svg>
+            ) : (
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+              </svg>
+            )}
           </button>
         </div>
       </div>
     </div>
   );
 }
+
