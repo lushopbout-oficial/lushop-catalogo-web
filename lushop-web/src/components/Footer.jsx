@@ -2,122 +2,58 @@ import Link from 'next/link';
 
 export default function Footer() {
   return (
-    <footer className="bg-bg-secondary border-t border-border-light mt-20">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-          {/* About */}
-          <div>
-            <h3 className="font-oswald text-lg font-semibold uppercase tracking-wide mb-4">
-              LU Shop+
-            </h3>
-            <p className="text-text-secondary text-sm leading-relaxed">
-              Sneakers premium y moda urbana a precios accesibles. Marcas reconocidas con garantía de autenticidad.
+    <footer className="bg-bg-dark text-white">
+      <div className="max-w-7xl mx-auto px-6 lg:px-12 pt-16 pb-8">
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-10 mb-16">
+
+          {/* Brand */}
+          <div className="col-span-2 lg:col-span-1">
+            <div className="font-oswald text-xl font-bold tracking-[0.12em] uppercase mb-4">
+              LU SHOP+
+            </div>
+            <p className="text-white/40 text-sm leading-relaxed mb-6 max-w-[200px]">
+              Sneakers, ropa y accesorios premium para un estilo único como tú.
             </p>
+            <div className="flex gap-4">
+              {['IG', 'WA', 'TK'].map(s => (
+                <button key={s} className="w-8 h-8 border border-white/20 text-white/40 hover:border-white hover:text-white transition-colors text-[10px] font-bold flex items-center justify-center">
+                  {s}
+                </button>
+              ))}
+            </div>
           </div>
 
-          {/* Categories */}
+          {/* Navegación */}
           <div>
-            <h3 className="font-oswald text-lg font-semibold uppercase tracking-wide mb-4">
-              Categorías
-            </h3>
-            <ul className="space-y-2">
-              <li>
-                <Link href="/?categoria=SNEAKERS" className="text-text-secondary text-sm hover:text-accent-silver transition-colors">
-                  Sneakers
-                </Link>
-              </li>
-              <li>
-                <Link href="/?categoria=KIDS" className="text-text-secondary text-sm hover:text-accent-silver transition-colors">
-                  Kids
-                </Link>
-              </li>
-              <li>
-                <Link href="/?categoria=HOMBRE" className="text-text-secondary text-sm hover:text-accent-silver transition-colors">
-                  Hombre
-                </Link>
-              </li>
-              <li>
-                <Link href="/?categoria=MUJER" className="text-text-secondary text-sm hover:text-accent-silver transition-colors">
-                  Mujer
-                </Link>
-              </li>
-            </ul>
+            <p className="text-[10px] uppercase tracking-[0.2em] text-white/40 font-semibold mb-5">Navegación</p>
+            {['Inicio', 'Sneakers', 'Prendas', 'Accesorios'].map(item => (
+              <Link key={item} href="/" className="block text-sm text-white/60 hover:text-white transition-colors mb-3">
+                {item}
+              </Link>
+            ))}
           </div>
 
-          {/* Info */}
+          {/* Ayuda */}
           <div>
-            <h3 className="font-oswald text-lg font-semibold uppercase tracking-wide mb-4">
-              Información
-            </h3>
-            <ul className="space-y-2">
-              <li>
-                <a href="#" className="text-text-secondary text-sm hover:text-accent-silver transition-colors">
-                  Envíos y Devoluciones
-                </a>
-              </li>
-              <li>
-                <a href="#" className="text-text-secondary text-sm hover:text-accent-silver transition-colors">
-                  Métodos de Pago
-                </a>
-              </li>
-              <li>
-                <a href="#" className="text-text-secondary text-sm hover:text-accent-silver transition-colors">
-                  Preguntas Frecuentes
-                </a>
-              </li>
-              <li>
-                <a href="#" className="text-text-secondary text-sm hover:text-accent-silver transition-colors">
-                  Contacto
-                </a>
-              </li>
-            </ul>
+            <p className="text-[10px] uppercase tracking-[0.2em] text-white/40 font-semibold mb-5">Ayuda</p>
+            {['Preguntas frecuentes', 'Envíos y devoluciones', 'Métodos de pago', 'Contacto'].map(item => (
+              <p key={item} className="text-sm text-white/60 mb-3">{item}</p>
+            ))}
           </div>
 
-          {/* Social */}
+          {/* Contacto */}
           <div>
-            <h3 className="font-oswald text-lg font-semibold uppercase tracking-wide mb-4">
-              Síguenos
-            </h3>
-            <ul className="space-y-2">
-              <li>
-                <a
-                  href="https://facebook.com/lushopplus"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-text-secondary text-sm hover:text-accent-silver transition-colors"
-                >
-                  Facebook
-                </a>
-              </li>
-              <li>
-                <a
-                  href="https://instagram.com/lushopplus"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-text-secondary text-sm hover:text-accent-silver transition-colors"
-                >
-                  Instagram
-                </a>
-              </li>
-              <li>
-                <a
-                  href="https://wa.me/19132187736"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-text-secondary text-sm hover:text-accent-silver transition-colors"
-                >
-                  WhatsApp: +1 913-218-7736
-                </a>
-              </li>
-            </ul>
+            <p className="text-[10px] uppercase tracking-[0.2em] text-white/40 font-semibold mb-5">Contacto</p>
+            <p className="text-sm text-white/60 mb-3">WhatsApp: +1 913-218-7736</p>
+            <p className="text-sm text-white/60 mb-3">lushopbout@gmail.com</p>
+            <p className="text-sm text-white/60">lu-shop.com</p>
           </div>
         </div>
 
         {/* Bottom */}
-        <div className="mt-12 pt-8 border-t border-border-light text-center">
-          <p className="text-text-secondary text-sm">
-            © {new Date().getFullYear()} LU Shop+. Todos los derechos reservados. | lu-shop.com
-          </p>
+        <div className="border-t border-white/10 pt-8 flex flex-col sm:flex-row justify-between items-center gap-4">
+          <p className="text-[11px] text-white/30">© 2025 LU SHOP+. Todos los derechos reservados.</p>
+          <p className="text-[11px] text-white/30">Hecho con pasión · Hecho para destacar.</p>
         </div>
       </div>
     </footer>
