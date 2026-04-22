@@ -42,3 +42,13 @@ html { scroll-behavior: smooth; }
   width: 32px; height: 32px;
   animation: spin 0.7s linear infinite;
 }
+@keyframes float {
+  0% { transform: translateY(0px); }
+  50% { transform: translateY(-20px); }
+  100% { transform: translateY(0px); }
+}
+
+.animate-float {
+  animation: float 6s ease-in-out infinite;
+}
+
