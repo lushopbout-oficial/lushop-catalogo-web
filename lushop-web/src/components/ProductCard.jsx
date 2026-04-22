@@ -19,15 +19,10 @@ export default function ProductCard({ group }) {
     e.stopPropagation();
     if (!selectedSize) return;
     addToCart({
-      sku:          selectedSize.sku,
-      marca:        group.marca,
-      modelo:       group.modelo,
-      categoria:    group.categoria,
-      segmento:     group.segmento,
-      foto_url:     group.foto_url,
-      talla:        selectedSize.talla,
-      stock:        selectedSize.stock,
-      precio_venta: selectedSize.precio_venta,
+      sku: selectedSize.sku, marca: group.marca, modelo: group.modelo,
+      categoria: group.categoria, segmento: group.segmento,
+      foto_url: group.foto_url, talla: selectedSize.talla,
+      stock: selectedSize.stock, precio_venta: selectedSize.precio_venta,
     });
     setAdded(true);
     setTimeout(() => setAdded(false), 1500);
@@ -38,111 +33,91 @@ export default function ProductCard({ group }) {
 
   return (
     <div
-      className="group relative bg-bg-card overflow-hidden transition-all duration-700"
+      className="group bg-bg-card border border-border-light overflow-hidden transition-all duration-500"
+      style={{ transform: hovered ? 'translateY(-3px)' : 'translateY(0)', boxShadow: hovered ? '0 12px 40px rgba(0,0,0,0.1)' : 'none' }}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
-      style={{ transform: hovered ? 'translateY(-4px)' : 'translateY(0)' }}
     >
       {/* Imagen */}
       <Link href={`/producto/${selectedSize.sku}`} className="block">
-        <div className="relative overflow-hidden bg-bg-secondary" style={{ aspectRatio: '4/3' }}>
+        <div className="relative bg-bg-primary overflow-hidden" style={{ aspectRatio: '1/1' }}>
           <Image
             src={group.foto_url || '/placeholder.jpg'}
             alt={group.modelo}
             fill
-            className="object-cover transition-transform duration-700"
-            style={{ transform: hovered ? 'scale(1.08)' : 'scale(1)' }}
+            className="object-contain object-center p-6 transition-transform duration-700"
+            style={{ transform: hovered ? 'scale(1.06)' : 'scale(1)' }}
             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
           />
 
-          {/* Overlay al hover */}
-          <div
-            className="absolute inset-0 bg-bg-primary transition-opacity duration-500"
-            style={{ opacity: hovered ? 0.15 : 0 }}
-          />
-
           {/* Badges */}
-          <div className="absolute top-4 left-4 flex flex-col gap-2">
+          <div className="absolute top-3 left-3 flex flex-col gap-1.5">
             {isPremium && (
-              <span className="bg-accent-gold text-bg-primary text-[10px] font-bold uppercase tracking-widest px-3 py-1">
+              <span className="bg-accent-gold text-white text-[9px] font-bold uppercase tracking-widest px-2.5 py-1">
                 Premium
               </span>
             )}
             {totalStock <= 2 && (
-              <span className="bg-white text-bg-primary text-[10px] font-bold uppercase tracking-widest px-3 py-1">
+              <span className="bg-text-primary text-white text-[9px] font-bold uppercase tracking-widest px-2.5 py-1">
                 {totalStock} disponibles
               </span>
             )}
           </div>
 
-          {/* Botón rápido al hover — aparece desde abajo */}
+          {/* Botón quick-add hover */}
           <div
-            className="absolute bottom-0 left-0 right-0 transition-all duration-500"
+            className="absolute bottom-0 left-0 right-0 transition-all duration-400"
             style={{ transform: hovered ? 'translateY(0)' : 'translateY(100%)' }}
           >
             <button
               onClick={handleAddToCart}
-              className={`w-full py-3 text-xs font-bold uppercase tracking-widest transition-colors duration-300 ${
-                added
-                  ? 'bg-green-600 text-white'
-                  : 'bg-white text-bg-primary hover:bg-accent-silver'
+              className={`w-full py-3 text-[11px] font-bold uppercase tracking-widest transition-colors duration-200 ${
+                added ? 'bg-green-600 text-white' : 'bg-text-primary text-white hover:bg-black'
               }`}
             >
-              {added ? '✓ Agregado al carrito' : 'Agregar al carrito'}
+              {added ? '✓ Agregado' : 'Agregar al carrito'}
             </button>
           </div>
         </div>
       </Link>
 
-      {/* Info del producto */}
-      <div className="p-5">
-
-        {/* Marca */}
-        <p className="text-[10px] text-text-secondary uppercase tracking-[0.2em] mb-2 font-medium">
-          {group.marca}
-        </p>
-
-        {/* Modelo */}
-        <h3 className="font-oswald text-lg font-semibold text-white uppercase tracking-wide mb-4 leading-tight">
+      {/* Info */}
+      <div className="p-4">
+        <p className="text-[10px] text-text-secondary uppercase tracking-[0.15em] mb-1">{group.marca}</p>
+        <h3 className="font-oswald text-base font-semibold text-text-primary uppercase tracking-wide mb-3 leading-tight">
           {group.modelo}
         </h3>
 
-        {/* Selector tallas */}
-        <div className="mb-4">
-          <div className="flex flex-wrap gap-1.5">
-            {group.sizes.map(size => (
-              <button
-                key={size.sku}
-                onClick={() => setSelectedSize(size)}
-                className={`min-w-[36px] px-2 py-1 text-[11px] font-medium border transition-all duration-200 ${
-                  selectedSize.sku === size.sku
-                    ? 'border-white bg-white text-bg-primary'
-                    : 'border-border-light text-text-secondary hover:border-border-medium hover:text-white'
-                }`}
-              >
-                {size.talla}
-              </button>
-            ))}
-          </div>
+        {/* Tallas */}
+        <div className="flex flex-wrap gap-1 mb-4">
+          {group.sizes.map(size => (
+            <button
+              key={size.sku}
+              onClick={() => setSelectedSize(size)}
+              className={`px-2 py-0.5 text-[10px] font-medium border transition-all duration-200 ${
+                selectedSize.sku === size.sku
+                  ? 'border-text-primary bg-text-primary text-white'
+                  : 'border-border-light text-text-secondary hover:border-text-primary hover:text-text-primary'
+              }`}
+            >
+              {size.talla}
+            </button>
+          ))}
         </div>
 
-        {/* Precio + línea separadora */}
-        <div className="flex items-center justify-between pt-4 border-t border-border-light">
-          <div className="font-oswald text-2xl font-bold text-white">
-            <span className="text-sm text-text-secondary mr-0.5">$</span>
-            {formatPrice(selectedSize.precio_venta)}
-            <span className="text-xs text-text-secondary ml-1 font-normal">MXN</span>
+        {/* Precio + botón */}
+        <div className="flex items-center justify-between">
+          <div className="font-oswald text-xl font-bold text-text-primary">
+            ${formatPrice(selectedSize.precio_venta)}
+            <span className="text-xs text-text-secondary font-normal ml-1">MXN</span>
           </div>
-
-          {/* Ícono de carrito — versión desktop (el botón principal está en hover) */}
           <button
             onClick={handleAddToCart}
-            className={`p-2 border transition-all duration-300 ${
+            className={`w-8 h-8 border flex items-center justify-center transition-all duration-200 ${
               added
                 ? 'border-green-500 text-green-500'
-                : 'border-border-light text-text-secondary hover:border-white hover:text-white'
+                : 'border-border-medium text-text-secondary hover:border-text-primary hover:text-text-primary'
             }`}
-            title="Agregar al carrito"
           >
             {added ? (
               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -150,7 +125,7 @@ export default function ProductCard({ group }) {
               </svg>
             ) : (
               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 4v16m8-8H4" />
               </svg>
             )}
           </button>
@@ -159,4 +134,3 @@ export default function ProductCard({ group }) {
     </div>
   );
 }
-
