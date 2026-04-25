@@ -5,24 +5,24 @@ import Image from 'next/image';
 
 const SLIDES = [
   {
-    label:    'Nuevos Arrivals',
-    titulo:   'Eleva tu\nestilo.',
-    subtitulo:'Sneakers premium.\nPrecios accesibles.',
-    imagen:   'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=900&q=80',
+    label:    'Concepto Total',
+    titulo:   'Tu estilo,\ncompleto.',
+    subtitulo: 'Sneakers, prendas y tecnología en un solo lugar. La curaduría más exclusiva para tu outfit diario.',
+    imagen:   '/hero/hero-lifestyle.jpg', // Ruta actualizada
     bg:       '#f0ede8',
   },
   {
-    label:    'Nueva Colección',
+    label:    'Sneakers de Culto',
     titulo:   'Hecho para\ndestacar.',
-    subtitulo:'Modelos exclusivos\nseleccionados para ti.',
-    imagen:   'https://images.unsplash.com/photo-1600185365926-3a2ce3cdb9eb?w=900&q=80',
+    subtitulo: 'Los clásicos que nunca mueren y los lanzamientos más recientes. Encuentra tu par ideal.',
+    imagen:   '/hero/hero-sneakers.jpg', // Ruta actualizada
     bg:       '#e8ecf0',
   },
   {
-    label:    'Colección Premium',
-    titulo:   'Estilo sin\ncompromisos.',
-    subtitulo:'Las mejores marcas\na tu alcance.',
-    imagen:   'https://images.unsplash.com/photo-1595950653106-6c9ebd614d3a?w=900&q=80',
+    label:    'Accesorios & Tech',
+    titulo:   'Tecnología\ny Detalles.',
+    subtitulo: 'Complementos que definen tu día a día. Calidad y diseño en cada accesorio.',
+    imagen:   '/hero/hero-accessories.jpg', // Ruta actualizada
     bg:       '#ece8f0',
   },
 ];
