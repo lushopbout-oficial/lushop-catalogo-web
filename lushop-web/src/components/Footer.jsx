@@ -27,7 +27,11 @@ export default function Footer() {
           <div>
             <p className="text-[10px] uppercase tracking-[0.2em] text-white/40 font-semibold mb-5">Navegación</p>
             {['Inicio', 'Sneakers', 'Prendas', 'Accesorios'].map(item => (
-              <Link key={item} href="/" className="block text-sm text-white/60 hover:text-white transition-colors mb-3">
+              <Link 
+                key={item} 
+                href={item === 'Inicio' ? '/' : `/?categoria=${item.toUpperCase()}`} 
+                className="block text-sm text-white/60 hover:text-white transition-colors mb-3"
+              >
                 {item}
               </Link>
             ))}
@@ -37,7 +41,9 @@ export default function Footer() {
           <div>
             <p className="text-[10px] uppercase tracking-[0.2em] text-white/40 font-semibold mb-5">Ayuda</p>
             {['Preguntas frecuentes', 'Envíos y devoluciones', 'Métodos de pago', 'Contacto'].map(item => (
-              <p key={item} className="text-sm text-white/60 mb-3">{item}</p>
+              <p key={item} className="text-sm text-white/60 mb-3 cursor-pointer hover:text-white transition-colors">
+                {item}
+              </p>
             ))}
           </div>
 
@@ -53,7 +59,7 @@ export default function Footer() {
         {/* Bottom */}
         <div className="border-t border-white/10 pt-8 flex flex-col sm:flex-row justify-between items-center gap-4">
           <p className="text-[11px] text-white/30">© 2026 LU SHOP+. Todos los derechos reservados por Diego Percastegui.</p>
-          <p className="text-[11px] text-white/30">Modelo realizado con pasión· Hecho para destacar.</p>
+          <p className="text-[11px] text-white/30 italic">Hecho para destacar.</p>
         </div>
       </div>
     </footer>
