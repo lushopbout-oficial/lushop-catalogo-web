@@ -51,7 +51,7 @@ export default function WhatsAppButton() {
 
       {/* Texto del botón (Opcional, pero ayuda a la conversión) */}
       <span className="text-xs font-bold uppercase tracking-[0.2em] text-black">
-        Pedir Info
+        WhatsApp 
       </span>
     </a>
   );
