@@ -8,21 +8,21 @@ const SLIDES = [
     label:    'Concepto Total',
     titulo:   'Tu estilo,\ncompleto.',
     subtitulo: 'Sneakers, prendas y tecnología en un solo lugar. La curaduría más exclusiva para tu outfit diario.',
-    imagen:   '/hero/hero-lifestyle.jpg', // Ruta actualizada
+    imagen:   '/hero/hero-lifestyle.JPG', // Ruta actualizada
     bg:       '#f0ede8',
   },
   {
     label:    'Sneakers de Culto',
     titulo:   'Hecho para\ndestacar.',
     subtitulo: 'Los clásicos que nunca mueren y los lanzamientos más recientes. Encuentra tu par ideal.',
-    imagen:   '/hero/hero-sneakers.jpg', // Ruta actualizada
+    imagen:   '/hero/hero-sneakers.JPG', // Ruta actualizada
     bg:       '#e8ecf0',
   },
   {
     label:    'Accesorios & Tech',
     titulo:   'Tecnología\ny Detalles.',
     subtitulo: 'Complementos que definen tu día a día. Calidad y diseño en cada accesorio.',
-    imagen:   '/hero/hero-accessories.jpg', // Ruta actualizada
+    imagen:   '/hero/hero-accessories.JPG', // Ruta actualizada
     bg:       '#ece8f0',
   },
 ];
