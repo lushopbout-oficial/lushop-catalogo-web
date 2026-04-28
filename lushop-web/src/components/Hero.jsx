@@ -4,15 +4,17 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { ShoppingBag, ArrowLeft, ArrowRight, CheckCircle2 } from 'lucide-react';
 import Link from 'next/link';
 
-// --- CONFIGURACIÓN DE LOS SLIDES ---
+// --- CONFIGURACIÓN DE LOS SLIDES (NUEVOS FONDOS PARA PNG) ---
 const SLIDES = [
   {
     label:    'Curaduría Streetwear',
     titulo:   'El Arte del\nStreetwear.',
     subtitulo:'Descubre la selección más exclusiva de sneakers y prendas de diseño.',
-    imagen:   '/hero/hero-lifestyle.PNG',
-    // Usamos un fondo ligeramente más oscuro para integrar
-    bg:       '#e8e6e1', 
+    // Ruta a tu nueva imagen PNG sin fondo
+    imagen:   '/hero/hero-lifestyle.PNG', 
+    // --- ESTE ES EL CAMBIO CLAVE ---
+    // Un tono crema muy suave y cálido que haga resaltar la prenda y combine con tu header
+    bg:       '#F5F3EF', 
     btnText:  'Explorar Colección',
     btnLink:  '#shop-now',
   },
@@ -21,7 +23,8 @@ const SLIDES = [
     titulo:   'Hechos para\nSobresalir.',
     subtitulo:'Clásicos atemporales y los drops más recientes. Tu próximo par está aquí.',
     imagen:   '/hero/hero-sneakers.PNG',
-    bg:       '#dfe2e6',
+    // Un gris claro y frío para que los colores de los sneakers (como los New Balance azules) resalten
+    bg:       '#EAECEF',
     btnText:  'Ver Sneakers',
     btnLink:  '#sneakers',
   },
@@ -30,7 +33,8 @@ const SLIDES = [
     titulo:   'Detalles que\nDefinen.',
     subtitulo:'Completa tu outfit con tecnología y accesorios de alta gama.',
     imagen:   '/hero/hero-accessories.PNG',
-    bg:       '#e2dfeb',
+    // Un tono lavanda/gris muy sutil para darle una vibra "Tech" y premium
+    bg:       '#E5E3ED',
     btnText:  'Ver Accesorios',
     btnLink:  '#accessories',
   },
@@ -57,11 +61,13 @@ export default function Hero() {
 
   return (
     <section 
+      // Agregamos una transición suave de color para cuando cambie el slide
       className="relative w-full h-[85vh] lg:h-[90vh] overflow-hidden transition-colors duration-1000"
+      // Aquí aplicamos el color de fondo dinámico definido en el objeto SLIDES
       style={{ backgroundColor: slide.bg }}
     >
       
-      {/* --- EFECTO DE CRISTAL SUPERIOR (Conexión con Header) --- */}
+      {/* --- EFECTO DE CRISTAL SUPERIOR (Para conectar con tu Header) --- */}
       <div className="absolute top-0 left-0 right-0 h-32 bg-white/5 backdrop-blur-[2px] z-20 pointer-events-none" />
 
       {/* --- CONTENIDO DEL SLIDE (ANIMADO) --- */}
@@ -120,23 +126,23 @@ export default function Hero() {
               </motion.div>
             </div>
 
-            {/* IMAGEN (Con Filtros de Integración) */}
+            {/* IMAGEN (NUEVO AJUSTE PARA PNG) */}
             <motion.div 
-              initial={{ opacity: 0, x: 50, scale: 0.95 }} animate={{ opacity: 1, x: 0, scale: 1 }} transition={{ delay: 0.5, duration: 1, ease: [0.22, 1, 0.36, 1] }}
+              initial={{ opacity: 0, x: 50, scale: 0.95 }}
+              animate={{ opacity: 1, x: 0, scale: 1 }}
+              exit={{ opacity: 0, x: -50, scale: 0.95 }}
+              transition={{ delay: 0.5, duration: 1, ease: [0.22, 1, 0.36, 1] }}
               className="relative order-1 lg:order-2 flex justify-center lg:justify-end items-center h-[35vh] lg:h-[60vh]"
             >
-              <div className="relative w-full h-full max-w-2xl overflow-hidden rounded-sm group">
-                
-                {/* 1. Capa de Overlay (Negro sutil) */}
-                <div className="absolute inset-0 bg-black/10 z-10 transition-opacity duration-500 group-hover:bg-black/5" />
-                
-                {/* 2. Imagen con Filtros (Brillo bajo para integración) */}
+              {/* Contenedor de la imagen sin fondo (quitamos bordes y sombras para minimalismo extremo) */}
+              <div className="relative w-full h-full max-w-2xl group">
+                {/* Imagen PNG cargada desde /public/hero/ */}
                 <img 
                   src={slide.imagen} 
                   alt={slide.titulo}
-                  className="w-full h-full object-cover object-center transition-transform duration-700 group-hover:scale-105"
-                  // APLICA FILTROS AQUÍ: bajamos brillo (brightness) y subimos contraste ligeramente (contrast)
-                  style={{ filter: 'brightness(0.9) contrast(1.05)' }} 
+                  // Usamos object-contain para que el producto transparente no se corte
+                  className="w-full h-full object-contain object-center transition-transform duration-700 group-hover:scale-105"
+                  // Eliminamos el efecto overlay sutil porque ahora queremos que el PNG flote
                 />
               </div>
             </motion.div>
