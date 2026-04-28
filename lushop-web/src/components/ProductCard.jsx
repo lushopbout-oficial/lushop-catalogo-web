@@ -4,6 +4,7 @@ import { useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useCart } from '@/context/CartContext';
+import { ShoppingBag, Check, Plus } from 'lucide-react';
 
 const formatPrice = (num) =>
   Math.round(Number(num) || 0).toLocaleString('es-MX');
@@ -12,7 +13,6 @@ export default function ProductCard({ group }) {
   const { addToCart } = useCart();
   const [selectedSize, setSelectedSize] = useState(group.sizes[0]);
   const [added, setAdded] = useState(false);
-  const [hovered, setHovered] = useState(false);
 
   const handleAddToCart = (e) => {
     e.preventDefault();
@@ -32,102 +32,85 @@ export default function ProductCard({ group }) {
   const isPremium = group.segmento === 'Premium';
 
   return (
-    <div
-      className="group bg-bg-card border border-border-light overflow-hidden transition-all duration-500"
-      style={{ transform: hovered ? 'translateY(-3px)' : 'translateY(0)', boxShadow: hovered ? '0 12px 40px rgba(0,0,0,0.1)' : 'none' }}
-      onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => setHovered(false)}
-    >
-      {/* Imagen */}
-      <Link href={`/producto/${selectedSize.sku}`} className="block">
-        <div className="relative bg-bg-primary overflow-hidden" style={{ aspectRatio: '1/1' }}>
-          <Image
-            src={group.foto_url || '/placeholder.jpg'}
-            alt={group.modelo}
-            fill
-            className="object-contain object-center p-6 transition-transform duration-700"
-            style={{ transform: hovered ? 'scale(1.06)' : 'scale(1)' }}
-            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-          />
+    <div className="group relative flex flex-col bg-white rounded-xl transition-all duration-500 hover:shadow-[0_20px_50px_rgba(0,0,0,0.05)]">
+      
+      {/* --- ÁREA DE IMAGEN --- */}
+      <Link href={`/producto/${selectedSize.sku}`} className="relative block aspect-square overflow-hidden rounded-t-xl bg-[#fcfcfc]">
+        <Image
+          src={group.foto_url || '/placeholder.jpg'}
+          alt={group.modelo}
+          fill
+          className="object-contain p-4 md:p-8 transition-transform duration-700 ease-out group-hover:scale-110"
+          sizes="(max-width: 768px) 50vw, 33vw"
+        />
 
-          {/* Badges */}
-          <div className="absolute top-3 left-3 flex flex-col gap-1.5">
-            {isPremium && (
-              <span className="bg-accent-gold text-white text-[9px] font-bold uppercase tracking-widest px-2.5 py-1">
-                Premium
-              </span>
-            )}
-            {totalStock <= 2 && (
-              <span className="bg-text-primary text-white text-[9px] font-bold uppercase tracking-widest px-2.5 py-1">
-                {totalStock} disponibles
-              </span>
-            )}
-          </div>
-
-          {/* Botón quick-add hover */}
-          <div
-            className="absolute bottom-0 left-0 right-0 transition-all duration-400"
-            style={{ transform: hovered ? 'translateY(0)' : 'translateY(100%)' }}
-          >
-            <button
-              onClick={handleAddToCart}
-              className={`w-full py-3 text-[11px] font-bold uppercase tracking-widest transition-colors duration-200 ${
-                added ? 'bg-green-600 text-white' : 'bg-text-primary text-white hover:bg-black'
-              }`}
-            >
-              {added ? '✓ Agregado' : 'Agregar al carrito'}
-            </button>
-          </div>
+        {/* Badges Flotantes (Minimalistas) */}
+        <div className="absolute top-3 left-3 flex flex-col gap-2 z-10">
+          {isPremium && (
+            <span className="bg-black/5 backdrop-blur-md border border-black/5 text-black text-[8px] font-bold uppercase tracking-[0.2em] px-3 py-1.5 rounded-full">
+              Premium
+            </span>
+          )}
+          {totalStock <= 2 && totalStock > 0 && (
+            <span className="bg-red-50 text-red-500 border border-red-100 text-[8px] font-bold uppercase tracking-[0.2em] px-3 py-1.5 rounded-full">
+              Últimas {totalStock} piezas
+            </span>
+          )}
         </div>
       </Link>
 
-      {/* Info */}
-      <div className="p-4">
-        <p className="text-[10px] text-text-secondary uppercase tracking-[0.15em] mb-1">{group.marca}</p>
-        <h3 className="font-oswald text-base font-semibold text-text-primary uppercase tracking-wide mb-3 leading-tight">
-          {group.modelo}
-        </h3>
+      {/* --- INFO DEL PRODUCTO --- */}
+      <div className="flex flex-col flex-grow p-4 md:p-6">
+        {/* Marca y Modelo */}
+        <div className="mb-4">
+          <p className="text-[9px] text-black/40 font-bold uppercase tracking-[0.3em] mb-1">
+            {group.marca}
+          </p>
+          <h3 className="font-oswald text-sm md:text-lg font-bold text-black uppercase tracking-tight leading-tight line-clamp-2">
+            {group.modelo}
+          </h3>
+        </div>
 
-        {/* Tallas */}
-        <div className="flex flex-wrap gap-1 mb-4">
+        {/* Selector de Tallas (Más limpio) */}
+        <div className="flex flex-wrap gap-1.5 mb-6">
           {group.sizes.map(size => (
             <button
               key={size.sku}
               onClick={() => setSelectedSize(size)}
-              className={`px-2 py-0.5 text-[10px] font-medium border transition-all duration-200 ${
-                selectedSize.sku === size.sku
-                  ? 'border-text-primary bg-text-primary text-white'
-                  : 'border-border-light text-text-secondary hover:border-text-primary hover:text-text-primary'
-              }`}
+              className={`
+                min-w-[32px] h-8 px-2 flex items-center justify-center
+                text-[10px] font-bold transition-all duration-300 rounded-md border
+                ${selectedSize.sku === size.sku
+                  ? 'bg-black border-black text-white'
+                  : 'bg-transparent border-black/5 text-black/40 hover:border-black/20 hover:text-black'
+                }
+              `}
             >
               {size.talla}
             </button>
           ))}
         </div>
 
-        {/* Precio + botón */}
-        <div className="flex items-center justify-between">
-          <div className="font-oswald text-xl font-bold text-text-primary">
-            ${formatPrice(selectedSize.precio_venta)}
-            <span className="text-xs text-text-secondary font-normal ml-1">MXN</span>
+        {/* Footer de Tarjeta: Precio y Botón */}
+        <div className="mt-auto flex items-center justify-between pt-4 border-t border-black/[0.03]">
+          <div className="flex flex-col">
+            <span className="text-[9px] text-black/30 font-bold uppercase tracking-widest">Precio</span>
+            <div className="font-oswald text-lg md:text-xl font-black text-black">
+              ${formatPrice(selectedSize.precio_venta)}
+            </div>
           </div>
+
           <button
             onClick={handleAddToCart}
-            className={`w-8 h-8 border flex items-center justify-center transition-all duration-200 ${
-              added
-                ? 'border-green-500 text-green-500'
-                : 'border-border-medium text-text-secondary hover:border-text-primary hover:text-text-primary'
-            }`}
+            className={`
+              relative flex items-center justify-center w-10 h-10 md:w-12 md:h-12 rounded-full transition-all duration-500
+              ${added 
+                ? 'bg-green-500 text-white rotate-[360deg]' 
+                : 'bg-black text-white hover:bg-gray-800 active:scale-90 shadow-lg shadow-black/10'
+              }
+            `}
           >
-            {added ? (
-              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-              </svg>
-            ) : (
-              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 4v16m8-8H4" />
-              </svg>
-            )}
+            {added ? <Check size={18} /> : <Plus size={20} />}
           </button>
         </div>
       </div>
