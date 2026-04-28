@@ -10,7 +10,7 @@ const SLIDES = [
     label:    'Curaduría Streetwear',
     titulo:   'El Arte del\nStreetwear.',
     subtitulo:'Descubre la selección más exclusiva de sneakers y prendas de diseño.',
-    imagen:   '/hero/hero-lifestyle.JPG',
+    imagen:   '/hero/hero-lifestyle.PNG',
     // Usamos un fondo ligeramente más oscuro para integrar
     bg:       '#e8e6e1', 
     btnText:  'Explorar Colección',
