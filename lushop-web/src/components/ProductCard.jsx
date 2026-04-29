@@ -43,20 +43,21 @@ export default function ProductCard({ group }) {
           className="object-contain p-4 md:p-8 transition-transform duration-700 ease-out group-hover:scale-110"
           sizes="(max-width: 768px) 50vw, 33vw"
         />
-{/* Badges Flotantes Optimizados */}
-<div className="absolute top-3 left-3 flex flex-col gap-2 z-10">
-  {isPremium && (
-    <span className="bg-black text-white text-[8px] font-bold uppercase tracking-[0.2em] px-3 py-1.5 rounded-full">
-      Colección Premium
-    </span>
-  )}
-  {/* Solo mostramos si es la última pieza absoluta, para no saturar */}
-  {totalStock === 1 && (
-    <span className="bg-white/80 backdrop-blur-sm border border-black/5 text-black/60 text-[8px] font-bold uppercase tracking-[0.2em] px-3 py-1.5 rounded-full">
-      Pieza Única
-    </span>
-  )}
-</div>
+
+        {/* Badges Flotantes - Ubicación Estratégica para no tapar el centro */}
+        <div className="absolute top-2 left-2 right-2 flex justify-between items-start pointer-events-none z-10">
+          {isPremium && (
+            <span className="bg-black/5 backdrop-blur-md border border-black/5 text-black/50 text-[7px] font-black uppercase tracking-[0.2em] px-2 py-1 rounded-sm">
+              Premium
+            </span>
+          )}
+          
+          {totalStock === 1 && (
+            <span className="bg-red-500/10 backdrop-blur-md border border-red-500/10 text-red-600 text-[7px] font-black uppercase tracking-[0.1em] px-2 py-1 rounded-sm">
+              Única
+            </span>
+          )}
+        </div>
       </Link>
 
       {/* --- INFO DEL PRODUCTO --- */}
@@ -71,7 +72,7 @@ export default function ProductCard({ group }) {
           </h3>
         </div>
 
-        {/* Selector de Tallas (Más limpio) */}
+        {/* Selector de Tallas */}
         <div className="flex flex-wrap gap-1.5 mb-6">
           {group.sizes.map(size => (
             <button
