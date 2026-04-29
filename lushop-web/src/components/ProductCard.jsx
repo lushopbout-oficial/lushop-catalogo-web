@@ -34,31 +34,33 @@ export default function ProductCard({ group }) {
   return (
     <div className="group relative flex flex-col bg-white rounded-xl transition-all duration-500 hover:shadow-[0_20px_50px_rgba(0,0,0,0.05)]">
       
-      {/* --- ÁREA DE IMAGEN --- */}
-      <Link href={`/producto/${selectedSize.sku}`} className="relative block aspect-square overflow-hidden rounded-t-xl bg-[#fcfcfc]">
-        <Image
-          src={group.foto_url || '/placeholder.jpg'}
-          alt={group.modelo}
-          fill
-          className="object-contain p-4 md:p-8 transition-transform duration-700 ease-out group-hover:scale-110"
-          sizes="(max-width: 768px) 50vw, 33vw"
-        />
+   {/* --- ÁREA DE IMAGEN --- */}
+<Link href={`/producto/${selectedSize.sku}`} className="relative block aspect-square overflow-hidden rounded-t-xl bg-[#fcfcfc]">
+  <Image
+    src={group.foto_url || '/placeholder.jpg'}
+    alt={group.modelo}
+    fill
+    className="object-contain p-4 md:p-8 transition-transform duration-700 ease-out group-hover:scale-110"
+    sizes="(max-width: 768px) 50vw, 33vw"
+  />
 
-        {/* Badges Flotantes - Ubicación Estratégica para no tapar el centro */}
-        <div className="absolute top-2 left-2 right-2 flex justify-between items-start pointer-events-none z-10">
-          {isPremium && (
-            <span className="bg-black/5 backdrop-blur-md border border-black/5 text-black/50 text-[7px] font-black uppercase tracking-[0.2em] px-2 py-1 rounded-sm">
-              Premium
-            </span>
-          )}
-          
-          {totalStock === 1 && (
-            <span className="bg-red-500/10 backdrop-blur-md border border-red-500/10 text-red-600 text-[7px] font-black uppercase tracking-[0.1em] px-2 py-1 rounded-sm">
-              Única
-            </span>
-          )}
-        </div>
-      </Link>
+  {/* Badge Premium Minimalista y Elegante */}
+  <div className="absolute top-3 left-3 z-10 pointer-events-none">
+    {isPremium && (
+      <span className="
+        flex items-center justify-center
+        bg-white/40 backdrop-blur-md 
+        border border-[#D4AF37]/40 
+        text-[#B8860B] text-[7px] md:text-[8px] 
+        font-black uppercase tracking-[0.25em] 
+        px-3 py-1.5 rounded-full
+        shadow-[0_2px_10px_rgba(212,175,55,0.1)]
+      ">
+        Premium
+      </span>
+    )}
+  </div>
+</Link>
 
       {/* --- INFO DEL PRODUCTO --- */}
       <div className="flex flex-col flex-grow p-4 md:p-6">
